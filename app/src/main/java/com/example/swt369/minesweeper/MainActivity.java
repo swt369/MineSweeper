@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 BitmapFactory.decodeResource(getResources(),R.drawable.mine9)};
         Brick.setBitMaps(bitmapsForNum,
                 BitmapFactory.decodeResource(getResources(),R.drawable.flag),
-                BitmapFactory.decodeResource(getResources(),R.drawable.bomb));
+                BitmapFactory.decodeResource(getResources(),R.drawable.bomb),
+                BitmapFactory.decodeResource(getResources(),R.drawable.brick));
         bricks[0] = Brick.initializeBricks(12, 12, 18);
     }
 

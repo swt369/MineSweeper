@@ -35,13 +35,22 @@ class Brick {
     private static Bitmap[] bitmapsForNum;
     private static Bitmap bitmapForFlag;
     private static Bitmap bitmapForBomb;
+    private static Bitmap bitmapForBrick;
+    private static Paint paintForNum;
+    private static Paint paintForBrick;
+    static{
+        paintForNum = new Paint();
+        paintForNum.setTextSize(40);
+        paintForBrick = new Paint();
+    }
 
-    static void setBitMaps(Bitmap[] bitmaps,@Nullable Bitmap bitmapForFlag,@Nullable Bitmap bitmapForBomb){
+    static void setBitMaps(Bitmap[] bitmaps,@Nullable Bitmap bitmapForFlag,@Nullable Bitmap bitmapForBomb,@Nullable Bitmap bitmapForBrick){
         if(bitmaps.length == 10){
             Brick.bitmapsForNum = bitmaps;
         }
         Brick.bitmapForFlag = bitmapForFlag;
         Brick.bitmapForBomb = bitmapForBomb;
+        Brick.bitmapForBrick = bitmapForBrick;
     }
 
     private static Brick[][] bricks;
@@ -117,12 +126,20 @@ class Brick {
         public void drawBrick(Canvas canvas, Brick brick, int length, int left, int top) {
             if(brick.field == null){
                  brick.field = new Rect(
-                         left + length * brick.mX + 2,
-                         top + length * brick.mY + 2,
-                         left + length * (brick.mX + 1) - 2,
-                         top + length * (brick.mY + 1) - 2);
+                         left + length * brick.mX,
+                         top + length * brick.mY,
+                         left + length * (brick.mX + 1),
+                         top + length * (brick.mY + 1));
             }
-            canvas.drawRect(brick.field, new Paint());
+            if(bitmapForBrick == null){
+                canvas.drawRect(brick.field,paintForBrick);
+            }else{
+                canvas.drawBitmap(
+                        bitmapForBrick,
+                        new Rect(0,0,bitmapForBrick.getWidth(),bitmapForBrick.getHeight()),
+                        brick.field,
+                        null);
+            }
         }
     }
 
@@ -144,6 +161,15 @@ class Brick {
 
         @Override
         public void drawBrick(Canvas canvas, Brick brick, int length, int left, int top) {
+            if(bitmapForBrick == null){
+                canvas.drawRect(brick.field,paintForBrick);
+            }else{
+                canvas.drawBitmap(
+                        bitmapForBrick,
+                        new Rect(0,0,bitmapForBrick.getWidth(),bitmapForBrick.getHeight()),
+                        brick.field,
+                        null);
+            }
             canvas.drawBitmap(
                     bitmapForFlag,
                     new Rect(0,0,bitmapForFlag.getWidth(),bitmapForFlag.getHeight()),
@@ -217,13 +243,11 @@ class Brick {
             if(brick.getSurroundMineCount() > 0){
                 Bitmap bitmap = bitmapsForNum[brick.getSurroundMineCount()];
                 if(bitmap == null){
-                    Paint paint = new Paint();
-                    paint.setTextSize(40);
                     canvas.drawText(
                             String.valueOf(brick.getSurroundMineCount()),
                             (brick.field.left + brick.field.right) / 2,
                             (brick.field.top + brick.field.bottom) / 2,
-                            paint);
+                            paintForNum);
                 }else{
                     canvas.drawBitmap(
                             bitmap,
