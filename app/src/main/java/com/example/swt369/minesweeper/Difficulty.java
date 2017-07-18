@@ -10,7 +10,7 @@ final class Difficulty {
     }
     static final int PRIMARY_SIZE_WIDTH = 8;
     static final int PRIMARY_SIZE_HEIGHT = 6;
-    static final int PRIMARY_MINECOUNT = 12;
+    static final int PRIMARY_MINECOUNT = 8;
     static final int INTERMEDIATE_SIZE_WIDTH = 12;
     static final int INTERMEDIATE_SIZE_HEIGHT = 10;
     static final int INTERMEDIATE_MINECOUNT = 20;

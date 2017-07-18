@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.IdRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private Handler handler;
     private GameView gameView;
+    private GameController gameController;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,10 +34,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what == Code.CODE_INVALIDATE_TIMER){
-                    timer.invalidate();
+                    if(gameController.isAlive()){
+                        timer.invalidate();
+                    }
                     return true;
                 }else if(msg.what == Code.CODE_INVALIDATE_MINECOUNTER){
                     mineCounter.invalidate();
+                    return true;
+                }else if(msg.what == Code.CODE_DIED){
+                    gameView.invalidate();
+                    gameController.setAlive(false);
+                    timer.pause();
+                    return true;
+                }else if(msg.what == Code.CODE_WIN){
+                    gameView.invalidate();
+                    gameController.setAlive(false);
+                    timer.pause();
+                    createDialogForWin();
                     return true;
                 }
                 return false;
@@ -54,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(initializeLayoutTop());
         layout.addView(gameView);
         layout.addView(initializeLayoutBottom());
-        gameView.setOnTouchListener(new GameController(handler,gameView));
+        gameController = new GameController(handler,gameView);
+        gameView.setOnTouchListener(gameController);
     }
 
     @Override
@@ -184,8 +199,28 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         gameView.refreshBricks(bricks[0]);
+        gameController.setAlive(true);
         timer.resetTime();
         mineCounter.invalidate();
+    }
+
+    private String getDifficultyText(){
+        switch (radioGroup.getCheckedRadioButtonId() % 3){
+            case 1:
+                return "初级";
+            case 2:
+                return "中级";
+            case 0:
+                return "高级";
+        }
+        return "";
+    }
+
+    private void createDialogForWin(){
+        AlertDialog builder = new AlertDialog.Builder(this).create();
+        builder.setTitle("你赢了！");
+        builder.setMessage(String.format("%s  用时%d秒",getDifficultyText(),timer.getTime()));
+        builder.show();
     }
 
     private static class Settings{

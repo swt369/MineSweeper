@@ -66,14 +66,30 @@ class Brick {
             handler.sendMessage(m);
         }
     }
+    private static void sendMessageDied(){
+        if(Brick.handler != null){
+            Message m = handler.obtainMessage();
+            m.what = Code.CODE_DIED;
+            handler.sendMessage(m);
+        }
+    }
+    private static void sendMessageWin(){
+        if(Brick.handler != null){
+            Message m = handler.obtainMessage();
+            m.what = Code.CODE_WIN;
+            handler.sendMessage(m);
+        }
+    }
 
     private static Brick[][] bricks;
     static int mineCount;
     static int flagCount;
+    private static int normalBrickCount;
     static Brick[][] initializeBricks(int rowCount,int columnCount,int mineCount){
         bricks = generateBricks(rowCount,columnCount,mineCount);
         Brick.mineCount = mineCount;
         Brick.flagCount = 0;
+        normalBrickCount = rowCount * columnCount - mineCount;
         return bricks;
     }
     private static Brick[][] generateBricks(int rowCount,int columnCount,int mineCount){
@@ -120,6 +136,13 @@ class Brick {
         @Override
         public boolean clicked(Brick brick) {
             brick.mState = OpenedState.getInstance();
+            if(brick.hasMine){
+                Brick.sendMessageDied();
+                return true;
+            }
+            if(--normalBrickCount == 0){
+                sendMessageWin();
+            }
             if(brick.getSurroundMineCount() == 0){
                 int x = brick.mX;
                 int y = brick.mY;
@@ -210,6 +233,7 @@ class Brick {
             if(brick.getSurroundMineCount() == 0 || brick.hasMine){
                 return false;
             }
+            int state = 0;
             int x = brick.mX;
             int y = brick.mY;
             int left = brick.getSurroundMineCount();
@@ -231,14 +255,27 @@ class Brick {
                     if(curX >= 0 && curX < bricks.length && curY >= 0 && curY < bricks[0].length){
                         Brick curBrick = bricks[curX][curY];
                         if(curBrick.mState == NormalState.getInstance()){
-                            if(curBrick.getSurroundMineCount() == 0){
-                                curBrick.clicked();
-                            }else {
+                            if(curBrick.hasMine){
                                 curBrick.mState = OpenedState.getInstance();
+                                state = 1;
+                            }else {
+                                if(curBrick.getSurroundMineCount() == 0){
+                                    curBrick.clicked();
+                                }else {
+                                    curBrick.mState = OpenedState.getInstance();
+                                    if(--normalBrickCount == 0){
+                                        state = 2;
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            }
+            if(state == 1){
+                Brick.sendMessageDied();
+            }else if(state == 2){
+                Brick.sendMessageWin();
             }
             return true;
         }

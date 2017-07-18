@@ -25,9 +25,22 @@ class Timer extends CounterView {
         thread.start();
     }
 
+    int getTime(){
+        return (int)((System.currentTimeMillis() - startTime) / 1000);
+    }
+
     void resetTime(){
         startTime = System.currentTimeMillis();
+        resume();
         invalidate();
+    }
+
+    void pause(){
+        isPause = true;
+    }
+
+    void resume(){
+        isPause = false;
     }
 
     @Override
@@ -36,7 +49,6 @@ class Timer extends CounterView {
             drawNumber(canvas,(int)((System.currentTimeMillis() - startTime) / 1000));
         }
     }
-
 
     private class ThreadForTimer extends Thread{
 

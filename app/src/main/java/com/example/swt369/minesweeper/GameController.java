@@ -17,6 +17,7 @@ final class GameController implements View.OnTouchListener {
         this.mHandler = handler;
         this.mView = view;
     }
+    private boolean isAlive = true;
     private long mLastClickTime;
     private Thread mLongTouchThread;
     private float mLastScreenX;
@@ -24,7 +25,9 @@ final class GameController implements View.OnTouchListener {
     private Brick mLastClickedBrick;
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.i("MESSAGE",String.valueOf(event.getAction()));
+        if(!isAlive){
+            return true;
+        }
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 mLastScreenX = event.getX();
@@ -50,6 +53,14 @@ final class GameController implements View.OnTouchListener {
                 return true;
         }
         return false;
+    }
+
+    void setAlive(boolean isAlive){
+        this.isAlive = isAlive;
+    }
+
+    boolean isAlive(){
+        return isAlive;
     }
 
     private boolean isMoved(float curX,float curY){
