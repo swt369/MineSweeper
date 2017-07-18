@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 
 import java.util.Random;
@@ -53,9 +55,25 @@ class Brick {
         Brick.bitmapForBrick = bitmapForBrick;
     }
 
+    private static Handler handler = null;
+    static void setHandler(Handler handler){
+        Brick.handler = handler;
+    }
+    private static void sendMessageForUpdateMineCounter(){
+        if(Brick.handler != null){
+            Message m = handler.obtainMessage();
+            m.what = Code.CODE_INVALIDATE_MINECOUNTER;
+            handler.sendMessage(m);
+        }
+    }
+
     private static Brick[][] bricks;
+    static int mineCount;
+    static int flagCount;
     static Brick[][] initializeBricks(int rowCount,int columnCount,int mineCount){
         bricks = generateBricks(rowCount,columnCount,mineCount);
+        Brick.mineCount = mineCount;
+        Brick.flagCount = 0;
         return bricks;
     }
     private static Brick[][] generateBricks(int rowCount,int columnCount,int mineCount){
@@ -119,6 +137,8 @@ class Brick {
         @Override
         public boolean reverseFlag(Brick brick) {
             brick.mState = FlagedState.getInstance();
+            Brick.flagCount++;
+            Brick.sendMessageForUpdateMineCounter();
             return true;
         }
 
@@ -156,6 +176,8 @@ class Brick {
         @Override
         public boolean reverseFlag(Brick brick) {
             brick.mState = NormalState.getInstance();
+            Brick.flagCount--;
+            Brick.sendMessageForUpdateMineCounter();
             return true;
         }
 

@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +15,7 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
     private final Brick[][][] bricks = new Brick[1][][];
     private Timer timer;
+    private MineCounter mineCounter;
     private Handler handler;
     private GameView gameView;
     @Override
@@ -26,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
-                if(msg.what == Code.CODE_INVALIDATE){
+                if(msg.what == Code.CODE_INVALIDATE_TIMER){
                     timer.invalidate();
+                    return true;
+                }else if(msg.what == Code.CODE_INVALIDATE_MINECOUNTER){
+                    mineCounter.invalidate();
                     return true;
                 }
                 return false;
@@ -64,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         timer.initializeSize();
+        mineCounter.initializeSize();
     }
 
     private void initializeBricks(){
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 BitmapFactory.decodeResource(getResources(),R.drawable.bomb),
                 BitmapFactory.decodeResource(getResources(),R.drawable.brick));
         bricks[0] = Brick.initializeBricks(12, 12, 18);
+        Brick.setHandler(handler);
     }
 
     private LinearLayout initializeLayoutTop(){
@@ -104,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
         timer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,50));
         layoutTop.addView(timer);
 
-        Button button = new Button(this);
-        button.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,50));
-        layoutTop.addView(button);
+        mineCounter = new MineCounter(this,bitmaps,handler);
+        mineCounter.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,50));
+        layoutTop.addView(mineCounter);
         layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,10));
         return layoutTop;
     }

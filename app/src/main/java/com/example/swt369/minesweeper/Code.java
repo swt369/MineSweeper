@@ -8,5 +8,6 @@ final class Code {
     private Code(){
 
     }
-    static final int CODE_INVALIDATE = 0x111;
+    static final int CODE_INVALIDATE_TIMER = 0x111;
+    static final int CODE_INVALIDATE_MINECOUNTER = 0x112;
 }
