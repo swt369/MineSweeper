@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -13,6 +14,8 @@ import java.util.Random;
  */
 
 class Brick {
+    private static final int[] OFFSET_X = new int[]{0,1,0,-1,-1,1,1,-1};
+    private static final int[] OFFSET_Y = new int[]{-1,0,1,0,-1,-1,1,1};
     private int mX;
     private int mY;
     private BrickState mState;
@@ -42,7 +45,12 @@ class Brick {
         Brick.bitmapForBomb = bitmapForBomb;
     }
 
-    static Brick[][] generateBricks(int rowCount,int columnCount,int mineCount){
+    private static Brick[][] bricks;
+    static Brick[][] initializeBricks(int rowCount,int columnCount,int mineCount){
+        bricks = generateBricks(rowCount,columnCount,mineCount);
+        return bricks;
+    }
+    private static Brick[][] generateBricks(int rowCount,int columnCount,int mineCount){
         Brick[][] bricks = new Brick[rowCount][columnCount];
         int[][] map = MapGenerator.generateMap(rowCount,columnCount,mineCount);
         for(int i = 0 ; i < rowCount ; i++)
@@ -98,6 +106,17 @@ class Brick {
         @Override
         public boolean clicked(Brick brick) {
             brick.mState = OpenedState.getInstance();
+            if(brick.getSurroundMineCount() == 0){
+                int x = brick.mX;
+                int y = brick.mY;
+                for(int i = 0 ; i < 4 ; i++){
+                    int curX = x + OFFSET_X[i];
+                    int curY = y + OFFSET_Y[i];
+                    if(curX >= 0 && curX < bricks.length && curY >= 0 && curY < bricks[0].length){
+                        bricks[curX][curY].clicked();
+                    }
+                }
+            }
             return true;
         }
 
@@ -214,8 +233,6 @@ class Brick {
     private static final class MapGenerator {
         static final int MINE = -1;
         private static final Random RANDOM = new Random();
-        private static final int[] OFFSET_X = new int[]{-1,0,1,1,1,0,-1,-1};
-        private static final int[] OFFSET_Y = new int[]{-1,-1,-1,0,1,1,1,0};
         private MapGenerator(){
 
         }
@@ -236,7 +253,7 @@ class Brick {
                     for(int k = 0 ; k < OFFSET_X.length ; k++){
                         int x = i + OFFSET_X[k];
                         int y = j + OFFSET_Y[k];
-                        if(x < 0 || x >= OFFSET_X.length || y < 0 || y >= OFFSET_Y.length){
+                        if(x < 0 || x >= rowCount || y < 0 || y >= columnCount){
                             continue;
                         }
                         if(map[x][y] == MINE){

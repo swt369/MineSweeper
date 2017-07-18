@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Brick.setBitMaps(bitmapsForNum,
                 BitmapFactory.decodeResource(getResources(),R.drawable.flag),
                 BitmapFactory.decodeResource(getResources(),R.drawable.bomb));
-        final Brick[][][] bricks = {Brick.generateBricks(10, 10, 10)};
+        final Brick[][][] bricks = {Brick.initializeBricks(10, 10, 10)};
         final GameView gameView = new GameView(this, bricks[0]);
         gameView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,60));
         ImageButton buttonNext = new ImageButton(this);
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bricks[0] = Brick.generateBricks(10,10,10);
+                bricks[0] = Brick.initializeBricks(10,10,10);
                 gameView.refreshBricks(bricks[0]);
             }
         });
@@ -61,6 +61,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        gameView.setOnTouchListener(new GameController(handler,gameView, bricks[0]));
+        gameView.setOnTouchListener(new GameController(handler,gameView));
     }
 }

@@ -12,11 +12,10 @@ import android.view.View;
 final class GameController implements View.OnTouchListener {
     private Handler mHandler;
     private GameView mView;
-    private Brick[][] bricks;
-    GameController(Handler handler,GameView view,Brick[][] bricks){
+
+    GameController(Handler handler, GameView view){
         this.mHandler = handler;
         this.mView = view;
-        this.bricks = bricks;
     }
     private long mLastClickTime;
     private Thread mLongTouchThread;
@@ -44,7 +43,7 @@ final class GameController implements View.OnTouchListener {
                 }
                 if(System.currentTimeMillis() - mLastClickTime < Settings.LONG_CLICK_TIME_IN_MILLS){
                     mHandler.removeCallbacks(mLongTouchThread);
-                    if(mLastClickedBrick.clicked()){
+                    if(!isMoved(event.getX(),event.getY()) && mLastClickedBrick.clicked()){
                         mView.invalidate();
                     }
                 }
