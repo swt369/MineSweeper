@@ -25,6 +25,11 @@ class Timer extends CounterView {
         thread.start();
     }
 
+    void resetTime(){
+        startTime = System.currentTimeMillis();
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if(width != 0 && height != 0){

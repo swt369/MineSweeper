@@ -146,10 +146,10 @@ class Brick {
         public void drawBrick(Canvas canvas, Brick brick, int length, int left, int top) {
             if(brick.field == null){
                  brick.field = new Rect(
-                         left + length * brick.mX,
-                         top + length * brick.mY,
-                         left + length * (brick.mX + 1),
-                         top + length * (brick.mY + 1));
+                         left + length * brick.mY,
+                         top + length * brick.mX,
+                         left + length * (brick.mY + 1),
+                         top + length * (brick.mX + 1));
             }
             if(bitmapForBrick == null){
                 canvas.drawRect(brick.field,paintForBrick);
