@@ -15,17 +15,31 @@ import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
     private final Brick[][][] bricks = new Brick[1][][];
+    private Timer timer;
+    private Handler handler;
+    private GameView gameView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if(msg.what == Code.CODE_INVALIDATE){
+                    timer.invalidate();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         initializeBricks();
 
-        final GameView gameView = new GameView(this, bricks[0]);
+        gameView = new GameView(this, bricks[0]);
         gameView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,60));
 
         ImageButton buttonNext = new ImageButton(this);
@@ -43,13 +57,13 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(initializeLayoutTop());
         layout.addView(gameView);
         layout.addView(buttonNext);
-        Handler handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                return false;
-            }
-        });
         gameView.setOnTouchListener(new GameController(handler,gameView));
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        timer.initializeSize();
     }
 
     private void initializeBricks(){
@@ -73,8 +87,26 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayout initializeLayoutTop(){
         LinearLayout layoutTop = new LinearLayout(this);
-        layoutTop.addView(new Button(this));
-        layoutTop.addView(new Button(this));
+
+        Bitmap[] bitmaps = new Bitmap[]{
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer0),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer1),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer2),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer3),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer4),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer5),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer6),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer7),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer8),
+                BitmapFactory.decodeResource(getResources(),R.drawable.timer9)
+        };
+        timer = new Timer(this,bitmaps,handler);
+        timer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,50));
+        layoutTop.addView(timer);
+
+        Button button = new Button(this);
+        button.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,50));
+        layoutTop.addView(button);
         layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,10));
         return layoutTop;
     }
