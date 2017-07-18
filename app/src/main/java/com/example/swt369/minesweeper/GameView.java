@@ -67,7 +67,7 @@ final class GameView extends View{
     }
 
     private static class Settings{
-        private static final float BRICKS_LEFT_RATIO = 0.1f;
-        private static final float BRICKS_RIGHT_RATIO = 0.1f;
+        private static final float BRICKS_LEFT_RATIO = 0.05f;
+        private static final float BRICKS_RIGHT_RATIO = 0.05f;
     }
 }

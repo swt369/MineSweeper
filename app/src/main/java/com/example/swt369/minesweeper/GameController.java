@@ -73,6 +73,6 @@ final class GameController implements View.OnTouchListener {
     }
 
     private static class Settings{
-        private static final long LONG_CLICK_TIME_IN_MILLS = 500;
+        private static final long LONG_CLICK_TIME_IN_MILLS = 400;
     }
 }

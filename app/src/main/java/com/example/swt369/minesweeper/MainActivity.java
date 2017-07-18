@@ -14,16 +14,45 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity {
+    private final Brick[][][] bricks = new Brick[1][][];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         LinearLayout layout = (LinearLayout)findViewById(R.id.layout);
         layout.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout layoutTop = new LinearLayout(this);
-        layoutTop.addView(new Button(this));
-        layoutTop.addView(new Button(this));
-        layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,10));
+
+        initializeBricks();
+
+        final GameView gameView = new GameView(this, bricks[0]);
+        gameView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,60));
+
+        ImageButton buttonNext = new ImageButton(this);
+        buttonNext.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.arrowright));
+        buttonNext.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        buttonNext.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,30));
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bricks[0] = Brick.initializeBricks(12,12,18);
+                gameView.refreshBricks(bricks[0]);
+            }
+        });
+
+        layout.addView(initializeLayoutTop());
+        layout.addView(gameView);
+        layout.addView(buttonNext);
+        Handler handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                return false;
+            }
+        });
+        gameView.setOnTouchListener(new GameController(handler,gameView));
+    }
+
+    private void initializeBricks(){
         Bitmap[] bitmapsForNum = new Bitmap[]{
                 null,
                 BitmapFactory.decodeResource(getResources(),R.drawable.mine1),
@@ -38,29 +67,15 @@ public class MainActivity extends AppCompatActivity {
         Brick.setBitMaps(bitmapsForNum,
                 BitmapFactory.decodeResource(getResources(),R.drawable.flag),
                 BitmapFactory.decodeResource(getResources(),R.drawable.bomb));
-        final Brick[][][] bricks = {Brick.initializeBricks(10, 10, 10)};
-        final GameView gameView = new GameView(this, bricks[0]);
-        gameView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,60));
-        ImageButton buttonNext = new ImageButton(this);
-        buttonNext.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.arrowright));
-        buttonNext.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        buttonNext.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,30));
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bricks[0] = Brick.initializeBricks(10,10,10);
-                gameView.refreshBricks(bricks[0]);
-            }
-        });
-        layout.addView(layoutTop);
-        layout.addView(gameView);
-        layout.addView(buttonNext);
-        Handler handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                return false;
-            }
-        });
-        gameView.setOnTouchListener(new GameController(handler,gameView));
+        bricks[0] = Brick.initializeBricks(12, 12, 18);
     }
+
+    private LinearLayout initializeLayoutTop(){
+        LinearLayout layoutTop = new LinearLayout(this);
+        layoutTop.addView(new Button(this));
+        layoutTop.addView(new Button(this));
+        layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,10));
+        return layoutTop;
+    }
+
 }

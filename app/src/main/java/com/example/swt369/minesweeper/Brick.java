@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.Random;
 
@@ -64,19 +63,7 @@ class Brick {
         return bricks;
     }
 
-    int getX(){
-        return mX;
-    }
-
-    int getY(){
-        return mY;
-    }
-
-    boolean hasMine(){
-        return hasMine;
-    }
-
-    int getSurroundMineCount(){
+    private int getSurroundMineCount(){
         return surroundMineCount;
     }
 
@@ -109,7 +96,7 @@ class Brick {
             if(brick.getSurroundMineCount() == 0){
                 int x = brick.mX;
                 int y = brick.mY;
-                for(int i = 0 ; i < 4 ; i++){
+                for(int i = 0 ; i < 8 ; i++){
                     int curX = x + OFFSET_X[i];
                     int curY = y + OFFSET_Y[i];
                     if(curX >= 0 && curX < bricks.length && curY >= 0 && curY < bricks[0].length){
@@ -172,7 +159,40 @@ class Brick {
         }
         @Override
         public boolean clicked(Brick brick) {
-            return false;
+            if(brick.getSurroundMineCount() == 0 || brick.hasMine){
+                return false;
+            }
+            int x = brick.mX;
+            int y = brick.mY;
+            int left = brick.getSurroundMineCount();
+            for(int i = 0 ; i < 8 ; i++){
+                int curX = x + OFFSET_X[i];
+                int curY = y + OFFSET_Y[i];
+                if(curX >= 0 && curX < bricks.length && curY >= 0 && curY < bricks[0].length){
+                    if(bricks[curX][curY].mState == FlagedState.getInstance()){
+                        left--;
+                    }
+                }
+            }
+            if(left > 0){
+                return false;
+            }else {
+                for(int i = 0 ; i < 8 ; i++){
+                    int curX = x + OFFSET_X[i];
+                    int curY = y + OFFSET_Y[i];
+                    if(curX >= 0 && curX < bricks.length && curY >= 0 && curY < bricks[0].length){
+                        Brick curBrick = bricks[curX][curY];
+                        if(curBrick.mState == NormalState.getInstance()){
+                            if(curBrick.getSurroundMineCount() == 0){
+                                curBrick.clicked();
+                            }else {
+                                curBrick.mState = OpenedState.getInstance();
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         @Override
