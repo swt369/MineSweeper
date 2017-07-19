@@ -74,6 +74,13 @@ class Brick {
         }
     }
     private static void sendMessageWin(){
+        for(int i = 0 ; i < bricks.length ; i++)
+            for(int j = 0 ; j < bricks[0].length ; j++){
+                Brick brick = bricks[i][j];
+                if(brick.mState == NormalState.getInstance()){
+                    brick.mState = FlagedState.getInstance();
+                }
+            }
         if(Brick.handler != null){
             Message m = handler.obtainMessage();
             m.what = Code.CODE_WIN;
@@ -233,7 +240,6 @@ class Brick {
             if(brick.getSurroundMineCount() == 0 || brick.hasMine){
                 return false;
             }
-            int state = 0;
             int x = brick.mX;
             int y = brick.mY;
             int left = brick.getSurroundMineCount();
@@ -257,25 +263,20 @@ class Brick {
                         if(curBrick.mState == NormalState.getInstance()){
                             if(curBrick.hasMine){
                                 curBrick.mState = OpenedState.getInstance();
-                                state = 1;
+                                Brick.sendMessageDied();
                             }else {
                                 if(curBrick.getSurroundMineCount() == 0){
                                     curBrick.clicked();
                                 }else {
                                     curBrick.mState = OpenedState.getInstance();
                                     if(--normalBrickCount == 0){
-                                        state = 2;
+                                        Brick.sendMessageWin();
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
-            if(state == 1){
-                Brick.sendMessageDied();
-            }else if(state == 2){
-                Brick.sendMessageWin();
             }
             return true;
         }
