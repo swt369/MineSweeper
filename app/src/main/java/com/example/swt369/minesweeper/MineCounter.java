@@ -3,17 +3,15 @@ package com.example.swt369.minesweeper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Handler;
 
 /**
  * Created by swt369 on 2017/7/18.
+ * 统计地雷个数并显示
  */
 
 class MineCounter extends CounterView {
-    private final Handler handler;
-    public MineCounter(Context context, Bitmap[] bitmapForNum, Handler handler) {
+    public MineCounter(Context context, Bitmap[] bitmapForNum) {
         super(context, bitmapForNum);
-        this.handler = handler;
     }
 
     @Override

@@ -6,10 +6,10 @@ import android.view.View;
 
 /**
  * Created by swt369 on 2017/7/17.
+ * 视图，用于绘制砖块
  */
 
 final class GameView extends View{
-    private final Context context;
     private Brick[][] bricks;
     private int ROW_COUNT;
     private int COLUMN_COUNT;
@@ -20,7 +20,6 @@ final class GameView extends View{
     private int BRICK_LENGTH;
     GameView(Context context,Brick[][] bricks) {
         super(context);
-        this.context = context;
         this.bricks = bricks;
 
         MAX_PIXEL_X = context.getResources().getDisplayMetrics().widthPixels;

@@ -6,7 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.View;
 
+/**
+ * Created by swt369 on 2017/7/18.
+ * 用于构建显示数字的View
+ */
+
 abstract class CounterView extends View{
+    private static final int MAX_NUM = 999;
     Bitmap[] bitmapForNum = new Bitmap[10];
     int width = 0;
     int height = 0;
@@ -32,6 +38,9 @@ abstract class CounterView extends View{
     protected abstract void onDraw(Canvas canvas);
 
     void drawNumber(Canvas canvas, int number) {
+        if(number > MAX_NUM){
+            number = MAX_NUM;
+        }
         int digit = 100;
         int drew = 0;
         while (digit > 0) {

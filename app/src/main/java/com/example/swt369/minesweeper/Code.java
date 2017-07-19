@@ -2,6 +2,7 @@ package com.example.swt369.minesweeper;
 
 /**
  * Created by swt369 on 2017/7/18.
+ * 管理消息码
  */
 
 final class Code {

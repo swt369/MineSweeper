@@ -2,6 +2,7 @@ package com.example.swt369.minesweeper;
 
 /**
  * Created by swt369 on 2017/7/18.
+ * 控制不同难度下生成图的参数
  */
 
 final class Difficulty {

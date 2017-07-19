@@ -1,12 +1,12 @@
 package com.example.swt369.minesweeper;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 /**
  * Created by swt369 on 2017/7/17.
+ * 控制器，负责接收触摸事件
  */
 
 final class GameController implements View.OnTouchListener {

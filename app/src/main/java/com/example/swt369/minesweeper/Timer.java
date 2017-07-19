@@ -8,20 +8,20 @@ import android.os.Message;
 
 /**
  * Created by swt369 on 2017/7/18.
+ * 显示游戏时间
  */
 
 class Timer extends CounterView {
-    private static final long MAX_TIME_SECOND = 999;
     private Handler handler;
     private long startTime;
     private boolean isPause;
-    private ThreadForTimer thread;
+
     Timer(Context context,Bitmap[] bitmapForNum,Handler handler) {
         super(context,bitmapForNum);
         startTime = System.currentTimeMillis();
         this.handler = handler;
         isPause = false;
-        thread = new ThreadForTimer();
+        ThreadForTimer thread = new ThreadForTimer();
         thread.start();
     }
 

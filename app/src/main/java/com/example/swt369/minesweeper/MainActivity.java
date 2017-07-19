@@ -2,6 +2,7 @@ package com.example.swt369.minesweeper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         space.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,Settings.TOP_SPACE_WEIGHT));
         layoutTop.addView(space);
 
-        mineCounter = new MineCounter(this,bitmaps,handler);
+        mineCounter = new MineCounter(this,bitmaps);
         mineCounter.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,Settings.TOP_MINECOUNTER_WEIGHT));
         layoutTop.addView(mineCounter);
         layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,Settings.TOP_LAYOUT_WEIGHT));
@@ -141,12 +142,15 @@ public class MainActivity extends AppCompatActivity {
         RadioButton radioButtonPrimary = new RadioButton(this);
         radioButtonPrimary.setText("初级");
         radioButtonPrimary.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1));
+        radioButtonPrimary.setTextColor(Color.WHITE);
         RadioButton radioButtonIntermediate = new RadioButton(this);
         radioButtonIntermediate.setText("中级");
         radioButtonIntermediate.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1));
         RadioButton radioButtonAdvanced = new RadioButton(this);
+        radioButtonIntermediate.setTextColor(Color.WHITE);
         radioButtonAdvanced.setText("高级");
         radioButtonAdvanced.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,1));
+        radioButtonAdvanced.setTextColor(Color.WHITE);
         radioGroup.addView(radioButtonPrimary);
         radioGroup.addView(radioButtonIntermediate);
         radioGroup.addView(radioButtonAdvanced);
@@ -162,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
         layoutBottom.addView(radioGroup);
 
         ImageButton buttonNext = new ImageButton(this);
-        buttonNext.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.arrowright));
-        buttonNext.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        buttonNext.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.restart));
+        buttonNext.setScaleType(ImageView.ScaleType.FIT_XY);
         buttonNext.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,Settings.BOTTOM_REFRESH_WEIGHT));
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override

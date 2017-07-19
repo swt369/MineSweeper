@@ -12,6 +12,7 @@ import java.util.Random;
 
 /**
  * Created by swt369 on 2017/7/17.
+ * 管理与砖块有关的逻辑
  */
 
 class Brick {
@@ -74,10 +75,9 @@ class Brick {
         }
     }
     private static void sendMessageWin(){
-        for(int i = 0 ; i < bricks.length ; i++)
-            for(int j = 0 ; j < bricks[0].length ; j++){
-                Brick brick = bricks[i][j];
-                if(brick.mState == NormalState.getInstance()){
+        for (Brick[] oneRow : bricks)
+            for (Brick brick : oneRow) {
+                if (brick.mState == NormalState.getInstance()) {
                     brick.mState = FlagedState.getInstance();
                 }
             }
