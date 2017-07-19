@@ -165,9 +165,8 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,Settings.BOTTOM_RADIOGROUP));
         layoutBottom.addView(radioGroup);
 
-        ImageButton buttonNext = new ImageButton(this);
-        buttonNext.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.restart));
-        buttonNext.setScaleType(ImageView.ScaleType.FIT_XY);
+        Button buttonNext = new Button(this);
+        buttonNext.setBackgroundColor(0x7f040000);
         buttonNext.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,Settings.BOTTOM_REFRESH_WEIGHT));
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
