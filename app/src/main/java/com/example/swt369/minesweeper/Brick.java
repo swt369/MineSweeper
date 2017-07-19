@@ -68,6 +68,12 @@ class Brick {
         }
     }
     private static void sendMessageDied(){
+        for (Brick[] oneRow : bricks)
+            for (Brick brick : oneRow) {
+                if(brick.mState != OpenedState.getInstance()){
+                    brick.mState = OpenedState.getInstance();
+                }
+            }
         if(Brick.handler != null){
             Message m = handler.obtainMessage();
             m.what = Code.CODE_DIED;

@@ -49,22 +49,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if(msg.what == Code.CODE_INVALIDATE_TIMER){
-                    if(gameController.isAlive()){
-                        timer.invalidate();
-                    }
+                    timer.invalidate();
                     return true;
                 }else if(msg.what == Code.CODE_INVALIDATE_MINECOUNTER){
                     mineCounter.invalidate();
                     return true;
                 }else if(msg.what == Code.CODE_DIED){
-                    gameView.invalidate();
-                    gameController.setAlive(false);
                     timer.pause();
+                    gameController.setAlive(false);
+                    gameView.invalidate();
                     return true;
                 }else if(msg.what == Code.CODE_WIN){
-                    gameView.invalidate();
-                    gameController.setAlive(false);
                     timer.pause();
+                    gameController.setAlive(false);
+                    gameView.invalidate();
                     createDialogForWin();
                     return true;
                 }
