@@ -1,5 +1,6 @@
 package com.example.swt369.minesweeper;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,6 +40,19 @@ public class MainActivity extends AppCompatActivity {
     private GameController gameController;
     private File destDir;
     private File fileTxt;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,21 +108,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeBricks(){
-        Bitmap[] bitmapsForNum = new Bitmap[]{
-                null,
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine1),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine2),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine3),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine4),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine5),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine6),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine7),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine8),
-                BitmapFactory.decodeResource(getResources(),R.drawable.mine9)};
-        Brick.setBitMaps(bitmapsForNum,
-                BitmapFactory.decodeResource(getResources(),R.drawable.flag),
-                BitmapFactory.decodeResource(getResources(),R.drawable.bomb),
-                BitmapFactory.decodeResource(getResources(),R.drawable.brick));
+//        Bitmap[] bitmapsForNum = new Bitmap[]{
+//                null,
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine1),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine2),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine3),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine4),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine5),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine6),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine7),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine8),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.mine9)};
+//        Brick.setBitMaps(bitmapsForNum,
+//                BitmapFactory.decodeResource(getResources(),R.drawable.flag),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.bomb),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.brick));
         bricks[0] = Brick.initializeBricks(
                 Difficulty.INTERMEDIATE_SIZE_WIDTH,
                 Difficulty.INTERMEDIATE_SIZE_HEIGHT,
@@ -118,19 +133,19 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout initializeLayoutTop(){
         LinearLayout layoutTop = new LinearLayout(this);
 
-        Bitmap[] bitmaps = new Bitmap[]{
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer0),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer1),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer2),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer3),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer4),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer5),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer6),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer7),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer8),
-                BitmapFactory.decodeResource(getResources(),R.drawable.timer9)
-        };
-        timer = new Timer(this,bitmaps,handler);
+//        Bitmap[] bitmaps = new Bitmap[]{
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer0),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer1),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer2),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer3),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer4),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer5),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer6),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer7),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer8),
+//                BitmapFactory.decodeResource(getResources(),R.drawable.timer9)
+//        };
+        timer = new Timer(this,((MineSweeperApplication)getApplication()).bitmapsForCounter,handler);
         timer.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,Settings.TOP_TIMER_WEIGHT));
         layoutTop.addView(timer);
 
@@ -139,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         space.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,Settings.TOP_SPACE_WEIGHT));
         layoutTop.addView(space);
 
-        mineCounter = new MineCounter(this,bitmaps);
+        mineCounter = new MineCounter(this,((MineSweeperApplication)getApplication()).bitmapsForCounter);
         mineCounter.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT,Settings.TOP_MINECOUNTER_WEIGHT));
         layoutTop.addView(mineCounter);
         layoutTop.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,Settings.TOP_LAYOUT_WEIGHT));

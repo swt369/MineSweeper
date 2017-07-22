@@ -13,7 +13,7 @@ import android.view.View;
 
 abstract class CounterView extends View{
     private static final int MAX_NUM = 999;
-    Bitmap[] bitmapForNum = new Bitmap[10];
+    private static Bitmap[] bitmapForNum = new Bitmap[10];
     int width = 0;
     int height = 0;
     Rect[] rects = new Rect[3];
